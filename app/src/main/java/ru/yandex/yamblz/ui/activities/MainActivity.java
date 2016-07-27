@@ -3,6 +3,9 @@ package ru.yandex.yamblz.ui.activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,19 +21,41 @@ public class MainActivity extends BaseActivity {
     @Inject @Named(DeveloperSettingsModule.MAIN_ACTIVITY_VIEW_MODIFIER)
     ViewModifier viewModifier;
 
+    private FragmentManager fm;
+
     @SuppressLint("InflateParams") // It's okay in our case.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get(this).applicationComponent().inject(this);
 
+        fm = getSupportFragmentManager();
         setContentView(viewModifier.modify(getLayoutInflater().inflate(R.layout.activity_main, null)));
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
+            fm.beginTransaction()
                     .replace(R.id.main_frame_layout, new ContentFragment())
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ContentFragment fragment = (ContentFragment) fm.findFragmentById(R.id.main_frame_layout);
+        switch (item.getItemId()) {
+            case R.id.menuItemAddColumn:
+                fragment.addRecyclerColumn();
+                break;
+            case R.id.menuItemRemoveColumn:
+                fragment.removeRecyclerColumn();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
