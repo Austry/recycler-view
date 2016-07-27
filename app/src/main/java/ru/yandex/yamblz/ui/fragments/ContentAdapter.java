@@ -2,6 +2,7 @@ package ru.yandex.yamblz.ui.fragments;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
 
     @Override
     public void onItemDelete(int position) {
-        colors.remove(position);
+        colors.remove(position % colors.size());
         notifyItemRemoved(position);
     }
 

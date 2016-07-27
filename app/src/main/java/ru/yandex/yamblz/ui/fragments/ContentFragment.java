@@ -1,5 +1,6 @@
 package ru.yandex.yamblz.ui.fragments;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +43,7 @@ public class ContentFragment extends BaseFragment {
 
         rv.setLayoutManager(gridLayoutManager);
         rv.setAdapter(adapter);
+        rv.addItemDecoration(new BordersDecorator());
 
         helper.attachToRecyclerView(rv);
 
