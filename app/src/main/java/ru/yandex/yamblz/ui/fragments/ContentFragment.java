@@ -1,15 +1,11 @@
 package ru.yandex.yamblz.ui.fragments;
 
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +35,7 @@ public class ContentFragment extends BaseFragment {
 
         ContentAdapter adapter = new ContentAdapter();
         adapter.setHasStableIds(true);
-        ItemTouchHelper helper = new ItemTouchHelper(new CustomItemTouchHelper(adapter));
+        ItemTouchHelper helper = new ItemTouchHelper(new CustomItemTouchHelperCallback(adapter));
 
         rv.setLayoutManager(gridLayoutManager);
         rv.setAdapter(adapter);
