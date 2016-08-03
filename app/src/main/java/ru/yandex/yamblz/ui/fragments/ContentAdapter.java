@@ -68,16 +68,13 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
         notifyItemRemoved(position);
     }
 
-
     static class ContentHolder extends RecyclerView.ViewHolder {
         ContentHolder(View itemView) {
             super(itemView);
         }
-
         void bind(Integer color) {
             itemView.setBackgroundColor(color);
             ((TextView) itemView).setText("#".concat(Integer.toHexString(color).substring(2)));
-
         }
     }
 }

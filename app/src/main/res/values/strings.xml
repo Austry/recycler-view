@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yamblz</string>
+    <string name="app_name">Recycler</string>
     <string name="content">Hello</string>
     <string name="menu_remove_column_title">Удалить столбец</string>
     <string name="menu_add_column_title">Добавить столбец</string>

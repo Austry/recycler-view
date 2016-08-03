@@ -9,21 +9,24 @@ import android.view.View;
 
 public class BordersDecorator extends RecyclerView.ItemDecoration {
 
+    private final static int PAINT_STROKE_WIDTH = 30;
+    private final static int PAINT_STROKE_WIDTH_HALF = PAINT_STROKE_WIDTH / 2;
     private Paint paint = new Paint();
+
 
     public BordersDecorator() {
         paint.setColor(Color.GRAY);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(30);
+        paint.setStrokeWidth(PAINT_STROKE_WIDTH);
     }
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
-        int viewsToDecorate = parent.getChildCount();
-        for (int i = 0; i < viewsToDecorate; i++) {
+        int viewsToDecorateCount = parent.getChildCount();
+        for (int i = 0; i < viewsToDecorateCount; i++) {
             View currentView = parent.getChildAt(i);
-            if(needToDecorate(parent.getChildAdapterPosition(currentView))){
+            if (needToDecorate(parent.getChildAdapterPosition(currentView))) {
                 decorate(c, currentView);
             }
         }
@@ -34,6 +37,7 @@ public class BordersDecorator extends RecyclerView.ItemDecoration {
     }
 
     private void decorate(Canvas canvas, View view) {
-        canvas.drawRect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom(), paint);
+        canvas.drawRect(view.getLeft() + PAINT_STROKE_WIDTH_HALF, view.getTop() + PAINT_STROKE_WIDTH_HALF,
+                view.getRight() - PAINT_STROKE_WIDTH_HALF, view.getBottom() - PAINT_STROKE_WIDTH_HALF, paint);
     }
 }
