@@ -4,14 +4,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 public class LastTwoElementsMovedDecorator extends RecyclerView.ItemDecoration implements LastMovedDecorator {
 
 
     public static final int DECORATION_SQUARE_SIDE = 40;
-    private int firstMovedIndex = -1;
-    private int secondMovedIndex = -1;
+    private static final String TAG = "LastTwoDecorator";
+    private int firstMovedIndex = Integer.MIN_VALUE;
+    private int secondMovedIndex = Integer.MIN_VALUE;
     private Paint paint;
 
     public LastTwoElementsMovedDecorator() {

@@ -1,10 +1,10 @@
 package ru.yandex.yamblz.ui.fragments;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,8 +18,9 @@ import ru.yandex.yamblz.R;
 
 class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> implements ItemTouchHelperAdapter {
 
+    private static final String TAG = "ContentAdapter";
     private final Random rnd = new Random();
-    private final static List<Integer> colors = new ArrayList<>();
+    private final static List<Integer> COLORS = new ArrayList<>();
 
     @Override
     public ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -28,7 +29,16 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
 
     @Override
     public void onBindViewHolder(ContentHolder holder, int position) {
-        holder.bind(createColorForPosition(position));
+        int color = createColorForPosition(position);
+        holder.bind(color);
+        holder.itemView.setOnClickListener(v -> {
+            holder.animatedRebind(createColorForPosition(position), newColorForPosition(position));
+        });
+    }
+
+    private Integer newColorForPosition(int position) {
+        COLORS.set(position, getRandomColor());
+        return COLORS.get(position);
     }
 
     @Override
@@ -37,26 +47,30 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
     }
 
     private Integer createColorForPosition(int position) {
-        int colorsSize = colors.size();
+        int colorsSize = COLORS.size();
         if (position == colorsSize) {
-            colors.add(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
-        }else if(position > colorsSize){
-            for(int i = 0, diff = position - colorsSize; i <= diff; i++){
-                colors.add(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
+            COLORS.add(getRandomColor());
+        } else if (position > colorsSize) {
+            for (int i = 0, diff = position - colorsSize; i <= diff; i++) {
+                COLORS.add(getRandomColor());
             }
         }
-        return colors.get(position);
+        return COLORS.get(position);
+    }
+
+    private Integer getRandomColor() {
+        return Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255));
     }
 
     @Override
     public void onItemMove(int from, int to) {
         if (from > to) {
             for (int i = from; i < to; i++) {
-                Collections.swap(colors, i, i + 1);
+                Collections.swap(COLORS, i, i + 1);
             }
         } else {
             for (int i = from; i > to; i--) {
-                Collections.swap(colors, i, i - 1);
+                Collections.swap(COLORS, i, i - 1);
             }
         }
         notifyItemMoved(from, to);
@@ -64,7 +78,7 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
 
     @Override
     public void onItemDelete(int position) {
-        colors.remove(position % colors.size());
+        COLORS.remove(position % COLORS.size());
         notifyItemRemoved(position);
     }
 
@@ -72,9 +86,27 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
         ContentHolder(View itemView) {
             super(itemView);
         }
+
+        void animatedRebind(Integer oldColor, Integer newColor) {
+            int colorFrom = oldColor;
+            int colorTo = newColor;
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            colorAnimation.setDuration(1000);
+            colorAnimation.addUpdateListener(animator -> {
+                itemView.setBackgroundColor((int) animator.getAnimatedValue());
+                setColorText(itemView, colorTo);
+            });
+            colorAnimation.start();
+
+        }
+
         void bind(Integer color) {
             itemView.setBackgroundColor(color);
-            ((TextView) itemView).setText("#".concat(Integer.toHexString(color).substring(2)));
+            setColorText(itemView, color);
+        }
+
+        private void setColorText(View toSet, Integer color) {
+            ((TextView) toSet).setText("#".concat(Integer.toHexString(color).substring(2)));
         }
     }
 }

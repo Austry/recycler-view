@@ -16,7 +16,7 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private Paint paint;
 
-    public CustomItemTouchHelperCallback(ItemTouchHelperAdapter adapter,@Nullable LastMovedDecorator lastMovedDecorator) {
+    public CustomItemTouchHelperCallback(ItemTouchHelperAdapter adapter, @Nullable LastMovedDecorator lastMovedDecorator) {
         this.adapter = adapter;
         this.paint = new Paint();
         paint.setColor(Color.RED);
@@ -27,7 +27,6 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         int swipeFlags = ItemTouchHelper.RIGHT;
-
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
@@ -36,7 +35,7 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
         int firstPosition = viewHolder.getAdapterPosition();
         int secondPosition = target.getAdapterPosition();
         adapter.onItemMove(firstPosition, secondPosition);
-        if(lastMovedDecorator != null){
+        if (lastMovedDecorator != null) {
             lastMovedDecorator.setLastMoved(firstPosition, secondPosition);
         }
 
@@ -53,8 +52,12 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
                             float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            int width = c.getWidth();
-            paint.setAlpha((int) ((dX * width) / 255));
+            int width = (int) (c.getWidth() * getSwipeThreshold(viewHolder));
+            if(dX < width){
+                paint.setAlpha((int) ((dX * 255) / width));
+            }else{
+                paint.setAlpha(255);
+            }
             c.drawRect(0, 0, c.getWidth(), c.getHeight(), paint);
         }
     }
