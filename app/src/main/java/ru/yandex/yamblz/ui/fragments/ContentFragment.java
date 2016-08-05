@@ -19,10 +19,10 @@ import ru.yandex.yamblz.ui.other.CustomItemTouchHelperCallback;
 
 public class ContentFragment extends BaseFragment {
 
-    private static final String LOG_TAG = "ContentFragment";
     private static final String COLUMNS_COUNT_ARGUMENT = "columnsCount";
 
     private int rvColumnsCount = 1;
+    private boolean isBordersDecorated = false;
     private GridLayoutManager gridLayoutManager;
     private BordersDecorator bordersDecorator;
 
@@ -33,7 +33,7 @@ public class ContentFragment extends BaseFragment {
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             rvColumnsCount = savedInstanceState.getInt(COLUMNS_COUNT_ARGUMENT);
         }
         bordersDecorator = new BordersDecorator();
@@ -55,8 +55,8 @@ public class ContentFragment extends BaseFragment {
         rv.setAdapter(adapter);
         helper.attachToRecyclerView(rv);
 
-        rv.addItemDecoration(bordersDecorator);
         rv.addItemDecoration(lastTwoElementsMovedDecorator);
+
     }
 
     @Override
@@ -65,8 +65,13 @@ public class ContentFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
     }
 
-    public  void toggleBorders(){
-        bordersDecorator.toggleDecoration();
+    public void toggleBorders() {
+        if (isBordersDecorated) {
+            rv.removeItemDecoration(bordersDecorator);
+        } else {
+            rv.addItemDecoration(bordersDecorator, 0);
+        }
+        isBordersDecorated = !isBordersDecorated;
         rv.invalidateItemDecorations();
     }
 
@@ -80,9 +85,11 @@ public class ContentFragment extends BaseFragment {
         }
     }
 
-    private void setRvColumnsCount(int columnsCount){
-        gridLayoutManager.setSpanCount(columnsCount);
-        gridLayoutManager.requestLayout();
-        rv.getAdapter().notifyItemRangeChanged(gridLayoutManager.findFirstVisibleItemPosition(), 0);
+    private void setRvColumnsCount(int columnsCount) {
+        if(gridLayoutManager != null){
+            gridLayoutManager.setSpanCount(columnsCount);
+            gridLayoutManager.requestLayout();
+            rv.getAdapter().notifyItemRangeChanged(gridLayoutManager.findFirstVisibleItemPosition(), 0);
+        }
     }
 }

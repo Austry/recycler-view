@@ -11,10 +11,7 @@ public class BordersDecorator extends RecyclerView.ItemDecoration {
 
     private final static int PAINT_STROKE_WIDTH = 30;
     private final static int PAINT_STROKE_WIDTH_HALF = PAINT_STROKE_WIDTH / 2;
-    private final static String LOG_TAG = "BordersDecorator";
-
-    private Paint paint = new Paint();
-    private boolean isDecorationOn = false;
+    private final Paint paint = new Paint();
 
 
     public BordersDecorator() {
@@ -26,9 +23,6 @@ public class BordersDecorator extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
-        if (!isDecorationOn) {
-            return;
-        }
         int viewsToDecorateCount = parent.getChildCount();
         for (int i = 0; i < viewsToDecorateCount; i++) {
             View currentView = parent.getChildAt(i);
@@ -36,10 +30,6 @@ public class BordersDecorator extends RecyclerView.ItemDecoration {
                 decorate(c, currentView);
             }
         }
-    }
-
-    public void toggleDecoration() {
-        isDecorationOn = !isDecorationOn;
     }
 
     private boolean needToDecorate(int childAdapterPosition) {

@@ -19,7 +19,6 @@ import ru.yandex.yamblz.ui.other.ItemTouchHelperAdapter;
 
 public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> implements ItemTouchHelperAdapter {
 
-    private static final String TAG = "ContentAdapter";
     private final Random rnd = new Random();
     private final static List<Integer> COLORS = new ArrayList<>();
 

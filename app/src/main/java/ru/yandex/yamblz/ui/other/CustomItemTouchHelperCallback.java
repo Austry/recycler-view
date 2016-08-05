@@ -10,15 +10,14 @@ import android.util.Log;
 import android.view.View;
 
 import ru.yandex.yamblz.ui.fragments.LastMovedDecorator;
-import ru.yandex.yamblz.ui.other.ItemTouchHelperAdapter;
 
 public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private static final String TAG = "CustomItemCallback";
-    private ItemTouchHelperAdapter adapter;
-    private LastMovedDecorator lastMovedDecorator;
+    private final ItemTouchHelperAdapter adapter;
+    private final LastMovedDecorator lastMovedDecorator;
 
-    private Paint paint;
+    private final Paint paint;
 
     public CustomItemTouchHelperCallback(ItemTouchHelperAdapter adapter, @Nullable LastMovedDecorator lastMovedDecorator) {
         this.adapter = adapter;

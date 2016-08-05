@@ -1,7 +1,6 @@
 package ru.yandex.yamblz.ui.activities;
 
 import android.annotation.SuppressLint;
-import android.database.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -51,7 +50,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ContentFragment fragment = (ContentFragment) fm.findFragmentById(R.id.main_frame_layout);
-        switch (item.getItemId()) {
+        int itemId = item.getItemId();
+        switch (itemId) {
             case R.id.menuItemAddColumn:
                 fragment.addRecyclerColumn();
                 break;
@@ -61,6 +61,8 @@ public class MainActivity extends BaseActivity {
             case R.id.menuItemToggleBorders:
                 fragment.toggleBorders();
                 break;
+            default:
+                throw new IllegalArgumentException("Not implemented "+ itemId + " menu button!");
         }
         return super.onOptionsItemSelected(item);
     }

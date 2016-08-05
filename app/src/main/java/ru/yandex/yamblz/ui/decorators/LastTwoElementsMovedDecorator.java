@@ -12,10 +12,9 @@ public class LastTwoElementsMovedDecorator extends RecyclerView.ItemDecoration i
 
     private static final int DECORATION_CIRCLE_RADIUS = 40;
     private static final int STROKE_WIDTH = 20;
-    private static final String TAG = "LastTwoDecorator";
+    private final Paint paint;
     private int firstMovedIndex = Integer.MIN_VALUE;
     private int secondMovedIndex = Integer.MIN_VALUE;
-    private Paint paint;
 
     public LastTwoElementsMovedDecorator() {
         paint = new Paint();
