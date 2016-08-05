@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.fragments;
+package ru.yandex.yamblz.ui.other;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,6 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
+
+import ru.yandex.yamblz.ui.fragments.LastMovedDecorator;
+import ru.yandex.yamblz.ui.other.ItemTouchHelperAdapter;
 
 public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
@@ -38,7 +42,6 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (lastMovedDecorator != null) {
             lastMovedDecorator.setLastMoved(firstPosition, secondPosition);
         }
-
         return true;
     }
 
@@ -46,6 +49,8 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         adapter.onItemDelete(viewHolder.getAdapterPosition());
     }
+
+
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
@@ -58,7 +63,11 @@ public class CustomItemTouchHelperCallback extends ItemTouchHelper.Callback {
             }else{
                 paint.setAlpha(255);
             }
-            c.drawRect(0, 0, c.getWidth(), c.getHeight(), paint);
+            View bounds = viewHolder.itemView;
+            c.drawRect(bounds.getLeft(), bounds.getTop(), bounds.getRight(), bounds.getBottom(), paint);
+        }
+        if(actionState == ItemTouchHelper.ACTION_STATE_IDLE){
+            Log.d(TAG, "onChildDraw: blaaa");
         }
     }
 }

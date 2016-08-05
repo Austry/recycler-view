@@ -12,16 +12,23 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import ru.yandex.yamblz.R;
+import ru.yandex.yamblz.ui.adapters.ContentAdapter;
+import ru.yandex.yamblz.ui.decorators.BordersDecorator;
+import ru.yandex.yamblz.ui.decorators.LastTwoElementsMovedDecorator;
+import ru.yandex.yamblz.ui.other.CustomItemTouchHelperCallback;
 
 public class ContentFragment extends BaseFragment {
 
-    private static final String TAG = "ContentFragment";
+    private static final String LOG_TAG = "ContentFragment";
     private static final String COLUMNS_COUNT_ARGUMENT = "columnsCount";
-    @BindView(R.id.rv)
-    RecyclerView rv;
 
     private int rvColumnsCount = 1;
     private GridLayoutManager gridLayoutManager;
+    private BordersDecorator bordersDecorator;
+
+    @BindView(R.id.rv)
+    RecyclerView rv;
+
 
     @NonNull
     @Override
@@ -29,7 +36,7 @@ public class ContentFragment extends BaseFragment {
         if(savedInstanceState != null){
             rvColumnsCount = savedInstanceState.getInt(COLUMNS_COUNT_ARGUMENT);
         }
-
+        bordersDecorator = new BordersDecorator();
         gridLayoutManager = new GridLayoutManager(getContext(), rvColumnsCount);
         return inflater.inflate(R.layout.fragment_content, container, false);
     }
@@ -41,16 +48,15 @@ public class ContentFragment extends BaseFragment {
         ContentAdapter adapter = new ContentAdapter();
         adapter.setHasStableIds(true);
         LastTwoElementsMovedDecorator lastTwoElementsMovedDecorator = new LastTwoElementsMovedDecorator();
+
         ItemTouchHelper helper = new ItemTouchHelper(new CustomItemTouchHelperCallback(adapter, lastTwoElementsMovedDecorator));
 
         rv.setLayoutManager(gridLayoutManager);
         rv.setAdapter(adapter);
-
-        rv.addItemDecoration(new BordersDecorator());
-        rv.addItemDecoration(lastTwoElementsMovedDecorator);
-
         helper.attachToRecyclerView(rv);
 
+        rv.addItemDecoration(bordersDecorator);
+        rv.addItemDecoration(lastTwoElementsMovedDecorator);
     }
 
     @Override
@@ -59,6 +65,10 @@ public class ContentFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
     }
 
+    public  void toggleBorders(){
+        bordersDecorator.toggleDecoration();
+        rv.invalidateItemDecorations();
+    }
 
     public void addRecyclerColumn() {
         setRvColumnsCount(++rvColumnsCount);

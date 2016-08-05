@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.fragments;
+package ru.yandex.yamblz.ui.adapters;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -15,8 +15,9 @@ import java.util.List;
 import java.util.Random;
 
 import ru.yandex.yamblz.R;
+import ru.yandex.yamblz.ui.other.ItemTouchHelperAdapter;
 
-class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> implements ItemTouchHelperAdapter {
+public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> implements ItemTouchHelperAdapter {
 
     private static final String TAG = "ContentAdapter";
     private final Random rnd = new Random();
@@ -83,19 +84,32 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
     }
 
     static class ContentHolder extends RecyclerView.ViewHolder {
+        ValueAnimator colorAnimation;
+
         ContentHolder(View itemView) {
             super(itemView);
         }
 
+
         void animatedRebind(Integer oldColor, Integer newColor) {
             int colorFrom = oldColor;
             int colorTo = newColor;
-            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            if (colorAnimation != null && colorAnimation.isRunning()) {
+                int animatedColor = (int) colorAnimation.getAnimatedValue();
+                colorAnimation.cancel();
+                colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), animatedColor, colorTo);
+
+            } else {
+                colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            }
+
             colorAnimation.setDuration(1000);
+
             colorAnimation.addUpdateListener(animator -> {
                 itemView.setBackgroundColor((int) animator.getAnimatedValue());
-                setColorText(itemView, colorTo);
+
             });
+            setColorText(itemView, colorTo);
             colorAnimation.start();
 
         }

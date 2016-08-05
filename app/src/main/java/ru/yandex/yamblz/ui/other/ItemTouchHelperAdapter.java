@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.fragments;
+package ru.yandex.yamblz.ui.other;
 
 /**
  * Created by Austry on 26/07/16.

@@ -1,6 +1,7 @@
 package ru.yandex.yamblz.ui.activities;
 
 import android.annotation.SuppressLint;
+import android.database.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,8 @@ public class MainActivity extends BaseActivity {
         fm = getSupportFragmentManager();
         setContentView(viewModifier.modify(getLayoutInflater().inflate(R.layout.activity_main, null)));
 
+
+
         if (savedInstanceState == null) {
             fm.beginTransaction()
                     .replace(R.id.main_frame_layout, new ContentFragment())
@@ -54,6 +57,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.menuItemRemoveColumn:
                 fragment.removeRecyclerColumn();
+                break;
+            case R.id.menuItemToggleBorders:
+                fragment.toggleBorders();
                 break;
         }
         return super.onOptionsItemSelected(item);
